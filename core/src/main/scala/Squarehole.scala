@@ -3,6 +3,7 @@ package be.julien.squarehole
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.{GL20, OrthographicCamera}
 import com.badlogic.gdx.{Game, Gdx}
+import event.EventSystem
 import stuff.{Bullet, Creator, Player}
 
 import scala.collection.mutable
@@ -31,6 +32,8 @@ class Squarehole extends Game {
     cam.update()
     shapeRender.setProjectionMatrix(cam.combined)
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+
+    EventSystem.act()
 
     player.act(delta)
 //    for (bullet <- )

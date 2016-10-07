@@ -3,7 +3,7 @@ package stuff
 import be.julien.squarehole.Squarehole
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
-import event.{EventSystem, ObjectCreation}
+import event.{EventSystem, CreateObject}
 
 /**
   * Created by julien on 21/09/16.
@@ -31,11 +31,12 @@ class Bullet {
   }
 }
 
+case class BulletCreation(pos: Vector2, dir: Vector2)
+
 object Bullet {
   var squarehole: Squarehole = null
 
   def add(position: Vector2, bulletDirection: Vector2) = {
     val bullet = new Bullet().init(position, bulletDirection)
-    EventSystem.event(new ObjectCreation)
   }
 }

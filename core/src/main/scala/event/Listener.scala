@@ -5,4 +5,7 @@ package event
   */
 trait Listener {
 
+  def receive(event: Event) = {}
+  def receive(createBullet: CreateBullet) = {}
+
 }

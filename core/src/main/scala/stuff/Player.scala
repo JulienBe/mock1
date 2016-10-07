@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.utils.TimeUtils
+import event.{CreateBullet, EventSystem}
 
 /**
   * Created by julien on 21/09/16.
@@ -21,9 +21,9 @@ class Player {
   var nextShot = 0f
 
   def fire() = {
+    println("let's shoot from player")
     bulletDirection.nor()
-
-    Bullet.add(position, bulletDirection)
+    EventSystem.event(new CreateBullet(position, bulletDirection))
   }
 
   def act(delta: Float) = {
