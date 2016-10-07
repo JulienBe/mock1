@@ -3,6 +3,7 @@ package stuff
 import be.julien.squarehole.Squarehole
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
+import event.ObjectCreation
 
 /**
   * Created by julien on 21/09/16.
@@ -35,6 +36,6 @@ object Bullet {
 
   def add(position: Vector2, bulletDirection: Vector2) = {
     val bullet = new Bullet().init(position, bulletDirection)
-    squarehole.addBullet(bullet)
+    squarehole.event(new ObjectCreation)
   }
 }

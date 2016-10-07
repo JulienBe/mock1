@@ -22,6 +22,7 @@ class Player {
 
   def fire() = {
     bulletDirection.nor()
+
     Bullet.add(position, bulletDirection)
   }
 
