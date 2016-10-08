@@ -7,7 +7,6 @@ import scala.collection.mutable
   */
 class World(val size: Vector2i) {
   val blocks = new Array[Byte](size.product)
-  val entities = new mutable.HashMap[Int, Entity]()
 
   def hasBlockAt(x: Int, y: Int) = getBlockAt(x, y) > 0
   def getBlockAt(x: Int, y: Int): Byte = blocks(blockPosition(x, y))

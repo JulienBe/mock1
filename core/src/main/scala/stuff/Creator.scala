@@ -9,8 +9,8 @@ class Creator extends Listener {
 
   def link() = EventSystem.heyListen(this, EventTypes.objectCreation)
 
-  override def receive(createBullet: CreateBullet): Unit = {
-    println("lest shoot")
+  override def receive(createBullet: CreateBullet) = {
+    Bullet.add(createBullet.pos, createBullet.dir)
   }
 
 }

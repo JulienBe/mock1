@@ -21,7 +21,6 @@ class Player {
   var nextShot = 0f
 
   def fire() = {
-    println("let's shoot from player")
     bulletDirection.nor()
     EventSystem.event(new CreateBullet(position, bulletDirection))
   }
