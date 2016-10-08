@@ -2,13 +2,15 @@ package be.julien.squarehole
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.{GL20, OrthographicCamera}
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.{Game, Gdx}
-import entities.Entity
-import event.EventSystem
-import stuff.{Creator, Player}
+import entities.{Enemy, Entity, Player}
+import event.{CreateEnemy, EventSystem}
+import stuff.Creator
 
 import scala.collection.mutable
+import scala.util.Random
 
 class Squarehole extends Game {
 
@@ -48,6 +50,11 @@ class Squarehole extends Game {
       entity.draw(shapeRender)
     }
     shapeRender.end()
+
+
+    EventSystem.event(
+      new CreateEnemy(classOf[Enemy], new Vector2(Random.nextGaussian().toFloat * 10, Random.nextGaussian().toFloat * 10))
+    )
   }
 
   def add(entity: Entity) = entities.add(entity)

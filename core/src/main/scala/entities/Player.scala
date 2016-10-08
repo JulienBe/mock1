@@ -1,4 +1,4 @@
-package stuff
+package entities
 
 import be.julien.squarehole.Squarehole
 import com.badlogic.gdx.Gdx
@@ -10,13 +10,12 @@ import event.{CreateBullet, EventSystem}
 /**
   * Created by julien on 21/09/16.
   */
-class Player {
+class Player extends Entity {
 
   val width = 5f
   val halfWidth = width / 2
   val speed = 100f
   val firerate = 0.1f
-  var position = new Vector2()
   var bulletDirection = new Vector2()
   var nextShot = 0f
 
@@ -25,7 +24,7 @@ class Player {
     EventSystem.event(new CreateBullet(position, bulletDirection))
   }
 
-  def act(delta: Float) = {
+  override def act(delta: Float) = {
     if (Gdx.input.isKeyPressed(Keys.Z))      position.y += speed * delta
     if (Gdx.input.isKeyPressed(Keys.S))      position.y -= speed * delta
     if (Gdx.input.isKeyPressed(Keys.Q))      position.x -= speed * delta
@@ -41,9 +40,14 @@ class Player {
       nextShot = Squarehole.time + firerate
       fire()
     }
+    Player.position.set(position)
   }
 
   def draw(shapeRender: ShapeRenderer): Unit = {
     shapeRender.circle(position.x - halfWidth, position.y - halfWidth, width, 8)
   }
+}
+
+object Player {
+  var position = new Vector2()
 }

@@ -15,7 +15,7 @@ abstract class Entity {
   def speed(): Float
   def draw(shapeRenderer: ShapeRenderer)
 
-  def act(delta: Float) = {
+  def act(delta: Float): Unit = {
     position.mulAdd(dir, speed() * delta)
   }
 
