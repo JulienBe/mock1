@@ -1,7 +1,7 @@
 package stuff
 
 import com.badlogic.gdx.math.Vector2
-import entities.{Bullet, Enemy}
+import entities.{Enemy, PlayerBullet}
 import event._
 
 /**
@@ -10,12 +10,12 @@ import event._
 class Creator extends Listener {
 
   def init() = {
-    EventSystem.heyListen(this, EventTypes.createObject)
+    EventSystem.heyListen(this, EventTypes.createBullet)
     EventSystem.heyListen(this, EventTypes.createEnemy)
   }
 
   override def receive(createBullet: CreateBullet) = {
-    Bullet.add(createBullet.pos, createBullet.dir)
+    PlayerBullet.add(createBullet.pos, createBullet.dir)
   }
 
   override def receive(createEnemy: CreateEnemy, pos: Vector2) = {

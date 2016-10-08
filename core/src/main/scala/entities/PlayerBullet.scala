@@ -2,41 +2,39 @@ package entities
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.Body
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 
 /**
   * Created by julien on 21/09/16.
   */
-class Bullet extends Entity {
-  override def width(): Float = Bullet.width
-  override def speed(): Float = Bullet.speed
-  override def density(): Float = Bullet.density
-  override def friction(): Float = Bullet.friction
-  override def restitution(): Float = Bullet.restitution
+class PlayerBullet extends Entity {
+  override def width(): Float = PlayerBullet.width
+  override def speed(): Float = PlayerBullet.speed
+  override def density(): Float = PlayerBullet.density
+  override def friction(): Float = PlayerBullet.friction
+  override def restitution(): Float = PlayerBullet.restitution
+  override def bodyType(): BodyType = BodyType.KinematicBody
 
   def init(position: Vector2, bulletDirection: Vector2) = {
-    this.position.set(position.x - Bullet.halfWidth, position.y - Bullet.halfWidth)
-    this.dir.set(bulletDirection)
+    body.setTransform(position.x - PlayerBullet.halfWidth, position.y - PlayerBullet.halfWidth, body.getAngle)
+    body.setLinearVelocity(bulletDirection.scl(speed()))
     this
   }
 
   def draw(shapeRender: ShapeRenderer) = {
-    shapeRender.circle(position.x - Bullet.halfWidth, position.y - Bullet.halfWidth, Bullet.width, 8)
   }
-
-  override def createBody(): Body = {null}
 
 }
 
 case class BulletCreation(pos: Vector2, dir: Vector2)
 
-object Bullet {
-  val speed = 800f
+object PlayerBullet {
+  val speed = 24f
   val density = 0.05f
   val friction = 2f
   val restitution = 0.6f
-  val width = 1f
+  val width = .1f
   val halfWidth = width / 2
 
-  def add(position: Vector2, bulletDirection: Vector2) = Entity.add(new Bullet().init(position, bulletDirection))
+  def add(position: Vector2, bulletDirection: Vector2) = Entity.add(new PlayerBullet().init(position, bulletDirection))
 }

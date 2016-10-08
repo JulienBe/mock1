@@ -11,8 +11,10 @@ object EventSystem {
 
   val events: Array[Event] = new Array[Event]()
   val listeners: Map[Int, mutable.MutableList[Listener]] = Map(
-    EventTypes.createObject -> new mutable.MutableList[Listener],
-    EventTypes.createEnemy -> new mutable.MutableList[Listener]
+    EventTypes.createBullet -> new mutable.MutableList[Listener],
+    EventTypes.createEnemy -> new mutable.MutableList[Listener],
+    EventTypes.collision -> new mutable.MutableList[Listener],
+    EventTypes.removeEnemy -> new mutable.MutableList[Listener]
   )
 
   def heyListen(listener: Listener, eventType: Int) = {
@@ -33,8 +35,10 @@ object EventSystem {
 
   def dispatch(event: Event) = event match {
     case CreateObject(pos) => println("ccc!")
-    case CreateBullet(pos, dir) => listeners(EventTypes.createObject).foreach(_.receive(event.asInstanceOf[CreateBullet]))
+    case RemoveEnemy(enemy) => listeners(EventTypes.removeEnemy).foreach(_.receive(enemy))
+    case CreateBullet(pos, dir) => listeners(EventTypes.createBullet).foreach(_.receive(event.asInstanceOf[CreateBullet]))
     case CreateEnemy(clazz, pos) => listeners(EventTypes.createEnemy).foreach(_.receive(event.asInstanceOf[CreateEnemy], pos))
+    case Collision(entityA, entityB) => listeners(EventTypes.collision).foreach(_.receive(entityA, entityB))
     case _ => println("??? " + event)
   }
 

@@ -4,70 +4,54 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.{GL20, OrthographicCamera}
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
-import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.{Game, Gdx}
-import entities.{Enemy, Entity, Player}
+import entities.{Enemy, Entity}
 import event.{CreateEnemy, EventSystem}
-import stuff.{Creator, Physic}
+import physic.Physic
+import stuff.{Creator, World}
 
 import scala.collection.mutable
 import scala.util.Random
 
 class Squarehole extends Game {
 
-  val worldWidth = 160
-  val worldHeight = 100
-  val player = new Player
   var cam: OrthographicCamera = null
   var shapeRender: ShapeRenderer = null
-  val entities = new Array[Entity]()
   var debugRenderer: Box2DDebugRenderer = null
   var physic: Physic = null
+  val world = new World()
 
   override def create() = {
     shapeRender = new ShapeRenderer()
     shapeRender.setAutoShapeType(true)
-    cam = new OrthographicCamera(worldWidth, worldHeight)
+    cam = new OrthographicCamera(World.width, World.height)
     cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0)
     cam.update()
     debugRenderer = new Box2DDebugRenderer()
     physic = new Physic(this)
-    Entity.squarehole = this
+    Entity.init(this)
     new Creator().init()
   }
 
   override def render() = {
     val delta = Gdx.graphics.getDeltaTime
-    Squarehole.time += delta
     cam.update()
     shapeRender.setProjectionMatrix(cam.combined)
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-    EventSystem.act()
     physic.doPhysicsStep(delta)
-
-    player.act(delta)
-
+    EventSystem.act()
     shapeRender.begin()
-    player.draw(shapeRender)
-    for (i <- 0 until entities.size) {
-      val entity = entities.get(i)
-      entity.act(delta)
-//      entity.draw(shapeRender)
-    }
+    world.act(delta)
     shapeRender.end()
     debugRenderer.render(Physic.world, cam.combined)
 
-    if (Physic.world.getBodyCount < 10)
+    if (Physic.world.getBodyCount < 8)
       EventSystem.event(
-        new CreateEnemy(classOf[Enemy], new Vector2(Random.nextGaussian().toFloat * 10, Random.nextGaussian().toFloat * 10))
+        new CreateEnemy(classOf[Enemy], new Vector2(Random.nextGaussian().toFloat, Random.nextGaussian().toFloat))
       )
   }
 
-  def add(entity: Entity) = entities.add(entity)
+  def add(entity: Entity) = world.add(entity)
 
-}
-
-object Squarehole {
-  var time = 0f
 }

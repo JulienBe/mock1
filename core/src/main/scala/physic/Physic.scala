@@ -1,4 +1,4 @@
-package stuff
+package physic
 
 import be.julien.squarehole.Squarehole
 import com.badlogic.gdx.math.Vector2
@@ -8,6 +8,8 @@ import com.badlogic.gdx.physics.box2d.World
   * Created by julien on 08/10/16.
   */
 class Physic(squarehole: Squarehole) {
+
+  Physic.world.setContactListener(new CollisionMaster)
 
   var accumulator = 0f
 
