@@ -1,5 +1,6 @@
 package stuff
 
+import entities.Bullet
 import event.{CreateBullet, EventSystem, EventTypes, Listener}
 
 /**

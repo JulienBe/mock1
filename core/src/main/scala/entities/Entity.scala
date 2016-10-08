@@ -1,4 +1,4 @@
-package stuff
+package entities
 
 import be.julien.squarehole.Squarehole
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer

@@ -4,8 +4,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.{GL20, OrthographicCamera}
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.{Game, Gdx}
+import entities.Entity
 import event.EventSystem
-import stuff.{Creator, Entity, Player}
+import stuff.{Creator, Player}
 
 import scala.collection.mutable
 
@@ -16,6 +17,7 @@ class Squarehole extends Game {
   val player = new Player
   var cam: OrthographicCamera = null
   var shapeRender: ShapeRenderer = null
+  val entities = new Array[Entity]()
 
   override def create(): Unit = {
     shapeRender = new ShapeRenderer()
