@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 import event.{CreateBullet, EventSystem}
 
 /**
@@ -12,12 +13,15 @@ import event.{CreateBullet, EventSystem}
   */
 class Player extends Entity {
 
-  val width = 5f
-  val halfWidth = width / 2
-  val speed = 100f
-  val firerate = 0.1f
   var bulletDirection = new Vector2()
   var nextShot = 0f
+
+  override def width(): Float = Player.width
+  override def speed(): Float = Player.speed
+  override def density(): Float = Player.density
+  override def friction(): Float = Player.friction
+  override def restitution(): Float = Player.restitution
+  override def bodyType(): BodyType = BodyType.KinematicBody
 
   def fire() = {
     bulletDirection.nor()
@@ -25,10 +29,11 @@ class Player extends Entity {
   }
 
   override def act(delta: Float) = {
-    if (Gdx.input.isKeyPressed(Keys.Z))      position.y += speed * delta
-    if (Gdx.input.isKeyPressed(Keys.S))      position.y -= speed * delta
-    if (Gdx.input.isKeyPressed(Keys.Q))      position.x -= speed * delta
-    if (Gdx.input.isKeyPressed(Keys.D))      position.x += speed * delta
+    dir.set(0, 0)
+    if (Gdx.input.isKeyPressed(Keys.Z))      dir.y += 1
+    if (Gdx.input.isKeyPressed(Keys.S))      dir.y -= 1
+    if (Gdx.input.isKeyPressed(Keys.Q))      dir.x -= 1
+    if (Gdx.input.isKeyPressed(Keys.D))      dir.x += 1
 
     bulletDirection.set(Vector2.Zero)
     if (Gdx.input.isKeyPressed(Keys.UP))     bulletDirection.y = 1
@@ -37,17 +42,26 @@ class Player extends Entity {
     if (Gdx.input.isKeyPressed(Keys.RIGHT))  bulletDirection.x = 1
 
     if (nextShot < Squarehole.time && (bulletDirection.x != 0 || bulletDirection.y != 0)) {
-      nextShot = Squarehole.time + firerate
+      nextShot = Squarehole.time + Player.firerate
       fire()
     }
-    Player.position.set(position)
+    body.setLinearVelocity(dir.scl(speed() * delta))
+    Player.position.set(body.getPosition)
   }
 
   def draw(shapeRender: ShapeRenderer): Unit = {
-    shapeRender.circle(position.x - halfWidth, position.y - halfWidth, width, 8)
+    shapeRender.circle(position.x - Player.halfWidth, position.y - Player.halfWidth, width, 8)
   }
+
 }
 
 object Player {
+  val width = 5f
+  val halfWidth = width / 2
+  val firerate = 0.1f
+  val speed = 10000f
+  val density = 0.05f
+  val friction = 2f
+  val restitution = 0.6f
   var position = new Vector2()
 }

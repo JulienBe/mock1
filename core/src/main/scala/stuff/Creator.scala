@@ -9,7 +9,7 @@ import event._
   */
 class Creator extends Listener {
 
-  def link() = {
+  def init() = {
     EventSystem.heyListen(this, EventTypes.createObject)
     EventSystem.heyListen(this, EventTypes.createEnemy)
   }

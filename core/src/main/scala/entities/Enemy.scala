@@ -1,5 +1,4 @@
 package entities
-import be.julien.squarehole.Squarehole
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 
@@ -7,10 +6,15 @@ import com.badlogic.gdx.math.Vector2
   * Created by julein on 08/10/16.
   */
 class Enemy extends Entity {
-  override def speed(): Float = 10
+  override def width(): Float = Enemy.width
+  override def speed(): Float = Enemy.speed
+  override def density(): Float = Enemy.density
+  override def friction(): Float = Enemy.friction
+  override def restitution(): Float = Enemy.restitution
 
   def init(pos: Vector2) = {
     position.set(pos)
+    body.setTransform(pos.x, pos.y, body.getAngle)
     this
   }
 
@@ -24,10 +28,14 @@ class Enemy extends Entity {
     dir.set(diff)
     super.act(delta)
   }
+
 }
 
 object Enemy {
-
+  val speed = 1000f
+  val density = 0.05f
+  val friction = 2f
+  val restitution = 0.6f
   val width = 3f
   val halfWidth = width / 2f
 
