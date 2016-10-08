@@ -16,7 +16,6 @@ class Squarehole extends Game {
   val player = new Player
   var cam: OrthographicCamera = null
   var shapeRender: ShapeRenderer = null
-  val entities = new Array[Entity]()
 
   override def create(): Unit = {
     shapeRender = new ShapeRenderer()
