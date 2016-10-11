@@ -1,16 +1,18 @@
 package stuff
 
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.utils.Array
 import entities.{Entity, Player}
 import event.{EventSystem, EventTypes, Listener, RemoveEnemy}
 
 /**
-  * Created by julie  n on 08/10/16.
+  * Created by julien on 08/10/16.
   */
 class World extends Listener{
 
   val player = new Player
   val entities = new Array[Entity]()
+  val map = new MapMaker("mock1")
 
   EventSystem.heyListen(this, EventTypes.removeEnemy)
 
@@ -28,6 +30,10 @@ class World extends Listener{
       entity.act(delta)
       //      entity.draw(shapeRender)
     }
+  }
+
+  def render(delta: Float, cam: OrthographicCamera) = {
+    map.render(cam)
   }
 
 }

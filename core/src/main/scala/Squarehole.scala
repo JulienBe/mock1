@@ -16,34 +16,32 @@ import scala.util.Random
 class Squarehole extends Game {
 
   var cam: OrthographicCamera = null
-  var shapeRender: ShapeRenderer = null
   var debugRenderer: Box2DDebugRenderer = null
   var physic: Physic = null
-  val world = new World()
+  var world: World = null
 
   override def create() = {
-    shapeRender = new ShapeRenderer()
-    shapeRender.setAutoShapeType(true)
     cam = new OrthographicCamera(World.width, World.height)
-    cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0)
+    cam.setToOrtho(false, World.width, World.height)
     cam.update()
     debugRenderer = new Box2DDebugRenderer()
     physic = new Physic(this)
+    world = new World()
     Entity.init(this)
     new Creator().init()
   }
 
   override def render() = {
     val delta = Gdx.graphics.getDeltaTime
+    Gdx.gl.glClearColor(0, 0, 0, 1);
+    Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     cam.update()
-    shapeRender.setProjectionMatrix(cam.combined)
-    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
     physic.doPhysicsStep(delta)
     EventSystem.act()
-    shapeRender.begin()
     world.act(delta)
-    shapeRender.end()
+    world.render(delta, cam)
     debugRenderer.render(Physic.world, cam.combined)
 
     if (Physic.world.getBodyCount < 8)

@@ -1,6 +1,7 @@
 package physic
 
 import be.julien.squarehole.Squarehole
+import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
 
@@ -8,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.World
   * Created by julien on 08/10/16.
   */
 class Physic(squarehole: Squarehole) {
+
 
   Physic.world.setContactListener(new CollisionMaster)
 
@@ -23,6 +25,7 @@ class Physic(squarehole: Squarehole) {
       accumulator -= Physic.timestep
     }
   }
+
 }
 
 object Physic {
