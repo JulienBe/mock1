@@ -1,13 +1,11 @@
 package physic
 
 import be.julien.squarehole.Squarehole
-import com.badlogic.gdx.maps.MapObjects
 import com.badlogic.gdx.maps.objects.{CircleMapObject, EllipseMapObject, PolygonMapObject, RectangleMapObject}
 import com.badlogic.gdx.maps.tiled.TiledMap
-import com.badlogic.gdx.math.{Circle, Rectangle, Vector2}
+import com.badlogic.gdx.math.{Rectangle, Vector2}
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 import com.badlogic.gdx.physics.box2d._
-import com.badlogic.gdx.utils.Array
 import stuff.Wall
 
 /**
@@ -37,9 +35,9 @@ class Physic(squarehole: Squarehole) {
       var shape: Shape = null
       obstacle match {
         case rect:RectangleMapObject => shape = getRectangle(rect.getRectangle, pixelPerTile)
-        case c:CircleMapObject => shape = getCircle(c.getCircle.radius, c.getCircle.x, c.getCircle.y)
+        case c:CircleMapObject => shape = getCircle(c.getCircle.radius, c.getCircle.x, c.getCircle.y, pixelPerTile)
         case poly:PolygonMapObject => shape = getPolygon(poly.getPolygon.getVertices)
-        case c:EllipseMapObject => shape = getCircle(c.getEllipse.width, c.getEllipse.x, c.getEllipse.y)
+        case c:EllipseMapObject => shape = getCircle(c.getEllipse.width / 2, c.getEllipse.x, c.getEllipse.y, pixelPerTile)
         case _ => {
           println("couldn't match obstacles : " + obstacle)
         }
@@ -47,22 +45,28 @@ class Physic(squarehole: Squarehole) {
       val bd = new BodyDef()
       bd.`type` = BodyType.StaticBody
       val body = Physic.world.createBody(bd)
-      body.createFixture(shape, 1).setUserData(new Wall)
+      val fixture = body.createFixture(shape, 1)
+      fixture.setUserData(new Wall)
+      val filter = new Filter
+      filter.categoryBits = Physic.otherCategory
+      filter.maskBits = Physic.otherMask
+      fixture.setFilterData(filter)
+      println("other : " + fixture.getFilterData.categoryBits + " " + fixture.getFilterData.maskBits)
       shape.dispose()
     }
   }
 
-  def getRectangle(rectangle: Rectangle, ratio: Float): Shape = {
+  def getRectangle(rectangle: Rectangle, ppt: Float): Shape = {
     val polygon = new PolygonShape()
-    val center = new Vector2((rectangle.x + rectangle.width * 0.5f) / ratio, (rectangle.y + rectangle.height * 0.5f) / ratio)
-    polygon.setAsBox((rectangle.width * 0.5f) / ratio, (rectangle.height * 0.5f) / ratio, center, 0.0f)
+    val center = new Vector2((rectangle.x + rectangle.width * 0.5f) / ppt, (rectangle.y + rectangle.height * 0.5f) / ppt)
+    polygon.setAsBox((rectangle.width * 0.5f) / ppt, (rectangle.height * 0.5f) / ppt, center, 0.0f)
     polygon
   }
 
-  def getCircle(radius: Float, x: Float, y: Float): Shape = {
+  def getCircle(radius: Float, x: Float, y: Float, ppt: Float): Shape = {
     val circleShape = new CircleShape()
-    circleShape.setRadius(radius)
-    circleShape.setPosition(new Vector2(x, y))
+    circleShape.setRadius(radius / ppt)
+    circleShape.setPosition(new Vector2((x + radius) / ppt, (y + radius) / ppt))
     circleShape
   }
 
@@ -75,6 +79,11 @@ class Physic(squarehole: Squarehole) {
 }
 
 object Physic {
+  val playerCategory: Short = 0x0001
+  val otherCategory: Short = 0x0002
+  val playerMask: Short = otherCategory
+  val otherMask: Short = (otherCategory | playerCategory).toShort
+
   val world = new World(Vector2.Zero, true)
   val timestep = 1/60f
   val velocityIteration = 6

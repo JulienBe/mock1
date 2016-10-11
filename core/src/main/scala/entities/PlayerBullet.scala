@@ -2,6 +2,7 @@ package entities
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
+import physic.Physic
 
 /**
   * Created by julien on 21/09/16.
@@ -12,6 +13,8 @@ class PlayerBullet extends Entity {
   override def density(): Float = PlayerBullet.density
   override def friction(): Float = PlayerBullet.friction
   override def restitution(): Float = PlayerBullet.restitution
+  override def mask(): Short = Physic.playerMask
+  override def category(): Short = Physic.playerCategory
 
   def init(position: Vector2, bulletDirection: Vector2) = {
     body.setTransform(position.x - PlayerBullet.halfWidth, position.y - PlayerBullet.halfWidth, body.getAngle)

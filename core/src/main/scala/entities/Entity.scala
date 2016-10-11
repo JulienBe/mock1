@@ -16,6 +16,8 @@ abstract class Entity() {
   val body: Body = createBody()
   var dir = new Vector2
 
+  def mask(): Short = Physic.otherMask
+  def category(): Short = Physic.otherCategory
   def speed(): Float
   def width(): Float
   def damping(): Float = 1f
@@ -56,7 +58,10 @@ abstract class Entity() {
     fixtureDef.density = density()
     fixtureDef.friction = friction()
     fixtureDef.restitution = restitution()
+    fixtureDef.filter.categoryBits = category()
+    fixtureDef.filter.maskBits = mask()
     val fixture = b.createFixture(fixtureDef)
+    println("entity : " + fixture.getFilterData.categoryBits + " " + fixture.getFilterData.maskBits)
     fixture.setUserData(this)
   }
 
