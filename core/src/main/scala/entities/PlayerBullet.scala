@@ -2,7 +2,6 @@ package entities
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 
 /**
   * Created by julien on 21/09/16.
@@ -13,7 +12,6 @@ class PlayerBullet extends Entity {
   override def density(): Float = PlayerBullet.density
   override def friction(): Float = PlayerBullet.friction
   override def restitution(): Float = PlayerBullet.restitution
-  override def bodyType(): BodyType = BodyType.KinematicBody
 
   def init(position: Vector2, bulletDirection: Vector2) = {
     body.setTransform(position.x - PlayerBullet.halfWidth, position.y - PlayerBullet.halfWidth, body.getAngle)
@@ -31,8 +29,8 @@ case class BulletCreation(pos: Vector2, dir: Vector2)
 object PlayerBullet {
   val speed = 24f
   val density = 0.05f
-  val friction = 2f
-  val restitution = 0.6f
+  val friction = 0f
+  val restitution = 1f
   val width = .1f
   val halfWidth = width / 2
 

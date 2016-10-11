@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2
 import event.{EventSystem, RemoveEnemy}
 
 /**
-  * Created by julein on 08/10/16.
+  * Created by julien on 08/10/16.
   */
 class Enemy extends Entity {
 

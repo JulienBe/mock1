@@ -29,6 +29,7 @@ class Squarehole extends Game {
     world = new World()
     Entity.init(this)
     new Creator().init()
+    physic.bodyFromMap(world.map.tiledMap)
   }
 
   override def render() = {
