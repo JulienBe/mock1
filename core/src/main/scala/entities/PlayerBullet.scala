@@ -8,6 +8,8 @@ import physic.Physic
   * Created by julien on 21/09/16.
   */
 class PlayerBullet extends Entity {
+
+  override def damping(): Float = 0
   override def width(): Float = PlayerBullet.width
   override def speed(): Float = PlayerBullet.speed
   override def density(): Float = PlayerBullet.density
@@ -24,14 +26,13 @@ class PlayerBullet extends Entity {
 
   def draw(shapeRender: ShapeRenderer) = {
   }
-
 }
 
 case class BulletCreation(pos: Vector2, dir: Vector2)
 
 object PlayerBullet {
   val speed = 24f
-  val density = 0.05f
+  val density = 0f
   val friction = 0f
   val restitution = 1f
   val width = .1f

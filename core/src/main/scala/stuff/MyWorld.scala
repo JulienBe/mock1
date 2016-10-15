@@ -4,11 +4,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.utils.Array
 import entities.{Entity, Player}
 import event.{EventSystem, EventTypes, Listener, RemoveEnemy}
+import physic.Physic
 
 /**
   * Created by julien on 08/10/16.
   */
-class World extends Listener{
+class MyWorld extends Listener{
 
   val player = new Player
   val entities = new Array[Entity]()
@@ -23,7 +24,7 @@ class World extends Listener{
   def add(entity: Entity) = entities.add(entity)
 
   def act(delta: Float) = {
-    World.time += delta
+    MyWorld.time += delta
     player.act(delta)
     for (i <- 0 until entities.size) {
       val entity = entities.get(i)
@@ -38,7 +39,7 @@ class World extends Listener{
 
 }
 
-object World {
+object MyWorld {
   val width = 16
   val height = 10
   var time = 0f

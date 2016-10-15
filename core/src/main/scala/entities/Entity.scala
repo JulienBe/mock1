@@ -42,16 +42,15 @@ abstract class Entity() {
     val shape: Shape = createShape
     createFixture(b, shape)
     shape.dispose()
+    bodyCreated()
     b
   }
-
   def createBodyDef: BodyDef = {
     val bodyDef = new BodyDef()
     bodyDef.`type` = bodyType()
     bodyDef.linearDamping = damping()
     bodyDef
   }
-
   def createFixture(b: Body, shape: Shape): Unit = {
     val fixtureDef = new FixtureDef()
     fixtureDef.shape = shape
@@ -61,15 +60,14 @@ abstract class Entity() {
     fixtureDef.filter.categoryBits = category()
     fixtureDef.filter.maskBits = mask()
     val fixture = b.createFixture(fixtureDef)
-    println("entity : " + fixture.getFilterData.categoryBits + " " + fixture.getFilterData.maskBits)
     fixture.setUserData(this)
   }
-
   def createShape: CircleShape = {
     val shape = new CircleShape()
     shape.setRadius(width())
     shape
   }
+  def bodyCreated() = {}
 
   def act(delta: Float): Unit = {
     body.applyForceToCenter(dir.scl(speed), true)

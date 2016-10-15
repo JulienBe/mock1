@@ -20,6 +20,8 @@ object Settings {
     libraryDependencies ++= Seq(
       "com.badlogicgames.gdx" % "gdx" % libgdxVersion.value,
       "com.badlogicgames.gdx" % "gdx-box2d" % libgdxVersion.value
+//      "com.badlogicgames.box2dlights" % "box2dlights" % "1.4"
+//      "com.badlogicgames.box2dlights" % "box2dlights" % "1.3"
     ),
     javacOptions ++= Seq(
       "-Xlint",
@@ -69,7 +71,8 @@ object Settings {
       "com.badlogicgames.gdx" % "gdx-box2d-platform" % libgdxVersion.value % "natives" classifier "natives-armeabi-v7a",
       "com.badlogicgames.gdx" % "gdx-box2d-platform" % libgdxVersion.value % "natives" classifier "natives-arm64-v8a",
       "com.badlogicgames.gdx" % "gdx-box2d-platform" % libgdxVersion.value % "natives" classifier "natives-x86",
-      "com.badlogicgames.gdx" % "gdx-box2d-platform" % libgdxVersion.value % "natives" classifier "natives-x86_64"
+      "com.badlogicgames.gdx" % "gdx-box2d-platform" % libgdxVersion.value % "natives" classifier "natives-x86_64",
+      "com.badlogicgames.box2dlights" % "box2dlights" % "1.4"
     ),
     nativeExtractions <<= (baseDirectory) { base => Seq(
       ("natives-armeabi.jar", new ExactFilter("libgdx.so"), base / "libs" / "armeabi"),

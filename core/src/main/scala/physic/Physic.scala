@@ -1,12 +1,14 @@
 package physic
 
 import be.julien.squarehole.Squarehole
+import com.badlogic.gdx.graphics.{Color, OrthographicCamera}
 import com.badlogic.gdx.maps.objects.{CircleMapObject, EllipseMapObject, PolygonMapObject, RectangleMapObject}
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.math.{Rectangle, Vector2}
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 import com.badlogic.gdx.physics.box2d._
-import stuff.Wall
+import lights.RayHandler
+import stuff.{MyWorld, Wall}
 
 /**
   * Created by julien on 08/10/16.
@@ -16,6 +18,11 @@ class Physic(squarehole: Squarehole) {
   Physic.world.setContactListener(new CollisionMaster)
 
   var accumulator = 0f
+
+  def render(delta: Float, cam: OrthographicCamera) = {
+    Physic.rayHandler.setCombinedMatrix(cam)
+    Physic.rayHandler.updateAndRender()
+  }
 
   def doPhysicsStep(deltaTime: Float) {
     // fixed time step
@@ -51,7 +58,6 @@ class Physic(squarehole: Squarehole) {
       filter.categoryBits = Physic.otherCategory
       filter.maskBits = Physic.otherMask
       fixture.setFilterData(filter)
-      println("other : " + fixture.getFilterData.categoryBits + " " + fixture.getFilterData.maskBits)
       shape.dispose()
     }
   }
@@ -85,6 +91,15 @@ object Physic {
   val otherMask: Short = (otherCategory | playerCategory).toShort
 
   val world = new World(Vector2.Zero, true)
+  val rayHandler = {
+    val r = new RayHandler(Physic.world)
+    r.setAmbientLight(1f, 1f, 1f, 0.05f)
+//    r.setShadows(false)
+//    r.setCulling(false)
+//    r.setBlur(false)
+//    RayHandler.setGammaCorrection(true)
+    r
+  }
   val timestep = 1/60f
   val velocityIteration = 6
   val positionIteration = 2
