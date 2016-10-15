@@ -1,19 +1,23 @@
 package assets
 
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.maps.objects.{CircleMapObject, EllipseMapObject, PolygonMapObject, RectangleMapObject}
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
-import com.badlogic.gdx.physics.box2d.{BodyDef, Filter, Shape}
+import com.badlogic.gdx.physics.box2d.{BodyDef, Filter, PolygonShape, Shape}
+import com.badlogic.gdx.utils.Array
 import physic.Physic
-import stuff.Wall
+import world.{Wall, WallTag}
 
 /**
   * Created by julien on 11/10/16.
   */
 class MapMan(assetMan: AssetMan) {
 
+  val walls = new Array[Wall]()
+  val wallTexture = assetMan.square
   val tiledMapRenderer = new OrthogonalTiledMapRenderer(assetMan.tiledMap, MapMan.scale)
 
   def bodyFromMap(tiledMap: TiledMap, pixelPerTile: Float = 16): Unit = {
@@ -34,18 +38,24 @@ class MapMan(assetMan: AssetMan) {
       bd.`type` = BodyType.StaticBody
       val body = Physic.world.createBody(bd)
       val fixture = body.createFixture(shape, 1)
-      fixture.setUserData(new Wall)
+      fixture.setUserData(new WallTag)
       val filter = new Filter
       filter.categoryBits = Physic.otherCategory
       filter.maskBits = Physic.otherMask
       fixture.setFilterData(filter)
+
+      if (shape.isInstanceOf[PolygonShape])
+        walls.addAll(Wall.fromBox(shape.asInstanceOf[PolygonShape], assetMan.square))
+
       shape.dispose()
     }
   }
 
-  def render(camera: OrthographicCamera): Unit = {
-    tiledMapRenderer.setView(camera)
-    tiledMapRenderer.render()
+  def render(camera: OrthographicCamera, spriteBatch: SpriteBatch, delta: Float): Unit = {
+//    tiledMapRenderer.setView(camera)
+//    tiledMapRenderer.render()
+    for (i <- 0 until walls.size)
+      walls.get(i).draw(spriteBatch, delta)
   }
 
 }

@@ -1,6 +1,7 @@
 package be.julien.squarehole
 
 import assets.{AssetMan, MapMan}
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.{GL20, OrthographicCamera}
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
@@ -8,7 +9,8 @@ import com.badlogic.gdx.{Game, Gdx}
 import entities.{Enemy, Entity}
 import event.{CreateEnemy, EventSystem}
 import physic.Physic
-import stuff.{Creator, MyWorld}
+import stuff.Creator
+import world.MyWorld
 
 import scala.collection.mutable
 import scala.util.Random
@@ -21,6 +23,7 @@ class Squarehole extends Game {
   var world: MyWorld = null
   var assetMan: AssetMan = null
   var mapMan: MapMan = null
+  var spriteBatch: SpriteBatch = null
 
   override def create() = {
     cam = new OrthographicCamera(MyWorld.width, MyWorld.height)
@@ -34,6 +37,7 @@ class Squarehole extends Game {
     assetMan = new AssetMan(MapMan.map1)
     mapMan = new MapMan(assetMan)
     mapMan.bodyFromMap(assetMan.tiledMap)
+    spriteBatch = new SpriteBatch()
   }
 
   override def render() = {
@@ -45,7 +49,9 @@ class Squarehole extends Game {
     physic.doPhysicsStep(delta)
     EventSystem.act()
     world.act(delta)
-    mapMan.render(cam)
+    spriteBatch.begin()
+    mapMan.render(cam, spriteBatch, delta)
+    spriteBatch.end()
     physic.render(delta, cam)
     debugRenderer.render(Physic.world, cam.combined)
 

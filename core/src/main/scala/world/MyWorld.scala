@@ -1,4 +1,4 @@
-package stuff
+package world
 
 import com.badlogic.gdx.utils.Array
 import entities.{Entity, Player}

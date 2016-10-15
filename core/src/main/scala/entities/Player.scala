@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2
 import event.{CreateBullet, EventSystem}
 import lights.ConeLight
 import physic.Physic
-import stuff.MyWorld
+import world.MyWorld
 
 /**
   * Created by julien on 21/09/16.
