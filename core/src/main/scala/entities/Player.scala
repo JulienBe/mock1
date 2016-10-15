@@ -18,11 +18,7 @@ class Player extends Entity {
   var bulletDirection = new Vector2()
   var nextShot = 0f
 
-  val coneLight = {
-    val c = new ConeLight(Physic.rayHandler, Player.rays, Color.CYAN, Player.distance, 2, 2, 32, Player.coneAngle)
-    c.setSoft(false)
-    c
-  }
+  val coneLight = new ConeLight(Physic.rayHandler, Player.rays, Color.CYAN, Player.distance, 2, 2, 32, Player.coneAngle)
 
   override def mask(): Short = Physic.playerMask
   override def category(): Short = Physic.playerCategory

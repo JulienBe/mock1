@@ -1,5 +1,6 @@
 package be.julien.squarehole
 
+import assets.{AssetMan, MapMan}
 import com.badlogic.gdx.graphics.{GL20, OrthographicCamera}
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
@@ -18,17 +19,21 @@ class Squarehole extends Game {
   var debugRenderer: Box2DDebugRenderer = null
   var physic: Physic = null
   var world: MyWorld = null
+  var assetMan: AssetMan = null
+  var mapMan: MapMan = null
 
   override def create() = {
     cam = new OrthographicCamera(MyWorld.width, MyWorld.height)
     cam.setToOrtho(false, MyWorld.width, MyWorld.height)
     cam.update()
     debugRenderer = new Box2DDebugRenderer()
-    physic = new Physic(this)
+    physic = new Physic()
     world = new MyWorld()
     Entity.init(this)
     new Creator().init()
-    physic.bodyFromMap(world.map.tiledMap)
+    assetMan = new AssetMan(MapMan.map1)
+    mapMan = new MapMan(assetMan)
+    mapMan.bodyFromMap(assetMan.tiledMap)
   }
 
   override def render() = {
@@ -40,7 +45,7 @@ class Squarehole extends Game {
     physic.doPhysicsStep(delta)
     EventSystem.act()
     world.act(delta)
-    world.render(delta, cam)
+    mapMan.render(cam)
     physic.render(delta, cam)
     debugRenderer.render(Physic.world, cam.combined)
 
