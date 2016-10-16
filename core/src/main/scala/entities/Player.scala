@@ -63,7 +63,7 @@ class Player extends Entity {
 }
 
 object Player {
-  val width = .5f
+  val width = .25f
   val halfWidth = width / 2
   val firerate = 0.1f
   val speed = 1000f
@@ -73,6 +73,6 @@ object Player {
   var position = new Vector2()
 
   val distance = MyWorld.width
-  val rays = 64
+  val rays = 80
   val coneAngle = 17
 }

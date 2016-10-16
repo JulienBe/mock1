@@ -30,7 +30,7 @@ class Wall(val origin: Vector2, val end: Vector2, val textureRegion: TextureRegi
 
 object Wall {
 
-  val height = 10f
+  val height = .1f
 
   def fromBox(polygon: PolygonShape, textureRegion: TextureRegion) = {
     val walls = new Array[Wall]()
@@ -43,8 +43,6 @@ object Wall {
       else
         polygon.getVertex(i + 1, end)
 
-      origin.scl(Gdx.graphics.getWidth / MyWorld.width, Gdx.graphics.getHeight / MyWorld.height)
-      end.scl(Gdx.graphics.getWidth / MyWorld.width, Gdx.graphics.getHeight / MyWorld.height)
       walls.add(new Wall(origin, end, textureRegion))
     }
     walls

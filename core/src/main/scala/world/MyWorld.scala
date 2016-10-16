@@ -1,5 +1,6 @@
 package world
 
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Array
 import entities.{Entity, Player}
 import event.{EventSystem, EventTypes, Listener, RemoveEnemy}
@@ -9,7 +10,7 @@ import event.{EventSystem, EventTypes, Listener, RemoveEnemy}
   */
 class MyWorld extends Listener{
 
-  val player = new Player
+  val player = new Player().init(new Vector2(2,2))
   val entities = new Array[Entity]()
 
   EventSystem.heyListen(this, EventTypes.removeEnemy)

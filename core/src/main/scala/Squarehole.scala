@@ -9,7 +9,7 @@ import com.badlogic.gdx.{Game, Gdx}
 import entities.{Enemy, Entity}
 import event.{CreateEnemy, EventSystem}
 import physic.Physic
-import stuff.Creator
+import stuff.{Cameraman, Creator}
 import world.MyWorld
 
 import scala.collection.mutable
@@ -17,7 +17,7 @@ import scala.util.Random
 
 class Squarehole extends Game {
 
-  var cam: OrthographicCamera = null
+  var cameraman: Cameraman = null
   var debugRenderer: Box2DDebugRenderer = null
   var physic: Physic = null
   var world: MyWorld = null
@@ -26,9 +26,7 @@ class Squarehole extends Game {
   var spriteBatch: SpriteBatch = null
 
   override def create() = {
-    cam = new OrthographicCamera(MyWorld.width, MyWorld.height)
-    cam.setToOrtho(false, MyWorld.width, MyWorld.height)
-    cam.update()
+    cameraman = new Cameraman(MyWorld.width, MyWorld.height)
     debugRenderer = new Box2DDebugRenderer()
     physic = new Physic()
     world = new MyWorld()
@@ -38,22 +36,24 @@ class Squarehole extends Game {
     mapMan = new MapMan(assetMan)
     mapMan.bodyFromMap(assetMan.tiledMap)
     spriteBatch = new SpriteBatch()
+    spriteBatch.setProjectionMatrix(cameraman.cam.combined)
   }
 
   override def render() = {
     val delta = Gdx.graphics.getDeltaTime
     Gdx.gl.glClearColor(0, 0, 0, 1)
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-    cam.update()
+    cameraman.update(world.player.body.getPosition, delta)
+    spriteBatch.setProjectionMatrix(cameraman.cam.combined)
 
     physic.doPhysicsStep(delta)
     EventSystem.act()
     world.act(delta)
     spriteBatch.begin()
-    mapMan.render(cam, spriteBatch, delta)
+    mapMan.render(cameraman.cam, spriteBatch, delta)
     spriteBatch.end()
-    physic.render(delta, cam)
-    debugRenderer.render(Physic.world, cam.combined)
+    physic.render(delta, cameraman.cam)
+//    debugRenderer.render(Physic.world, cameraman.cam.combined)
 
     if (Physic.world.getBodyCount < 8)
       EventSystem.event(
