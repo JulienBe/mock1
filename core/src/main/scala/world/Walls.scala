@@ -11,4 +11,5 @@ class Walls extends Entity {
   override def density(): Float = ???
   override def friction(): Float = ???
   override def restitution(): Float = ???
+  override def free(): Unit = ???
 }

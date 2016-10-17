@@ -30,6 +30,8 @@ class Enemy extends Entity {
       super.destroy()
     }
   }
+
+  override def free(): Unit = {}
 }
 
 object Enemy {

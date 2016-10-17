@@ -16,6 +16,7 @@ object Physic {
   val playerMask: Short = otherCategory
   val otherMask: Short = (otherCategory | playerCategory).toShort
   val bodiesToClean = new Array[Body]()
+  val bodiesToDeactivate = new Array[Body]()
 
   val world = new World(Vector2.Zero, true)
   world.setContactListener(new CollisionMaster)
@@ -32,14 +33,21 @@ object Physic {
     Physic.rayHandler.updateAndRender()
   }
 
-  def cleanBodies() = {
-    for (i <- 0 until bodiesToClean.size)
-      world.destroyBody(bodiesToClean.get(i))
-    bodiesToClean.clear()
+  def doForAllBodies(bodyToUnit: (Body) => Unit, bodies: Array[Body]) = {
+    for (i <- 0 until bodies.size)
+      bodyToUnit(bodies.get(i))
+    bodies.clear()
+  }
+
+  def sleepAllBodies(bodies: Array[Body]) = {
+    for (i <- 0 until bodies.size)
+      bodies.get(i).setActive(false)
+    bodies.clear()
   }
 
   def doPhysicsStep(deltaTime: Float) {
-    cleanBodies()
+    doForAllBodies(world.destroyBody(_), bodiesToClean)
+    sleepAllBodies(bodiesToDeactivate)
     // fixed time step
     // max frame time to avoid spiral of death (on slow devices)
     val frameTime = Math.min(deltaTime, 0.25f)
@@ -51,6 +59,7 @@ object Physic {
   }
 
   def bodyToClean(body: Body) = bodiesToClean.add(body)
+  def bodyToSleep(body: Body) = bodiesToDeactivate.add(body)
 
   def getRectangle(rectangle: Rectangle, ppt: Float): Shape = {
     val polygon = new PolygonShape()

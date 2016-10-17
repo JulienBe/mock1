@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 import com.badlogic.gdx.physics.box2d._
+import com.badlogic.gdx.utils.Pool
 import event.{EventSystem, EventTypes, Listener}
 import physic.Physic
 
@@ -16,6 +17,7 @@ abstract class Entity() {
   val body = createBody()
   var dir = new Vector2
 
+  def free()
   def mask(): Short = Physic.otherMask
   def category(): Short = Physic.otherCategory
   def speed(): Float
@@ -34,7 +36,8 @@ abstract class Entity() {
   }
 
   def destroy() = {
-    Physic.bodyToClean(body)
+    Physic.bodyToSleep(body)
+    free()
   }
 
   def createBody(): Body = {

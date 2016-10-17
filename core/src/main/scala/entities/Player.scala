@@ -59,6 +59,7 @@ class Player extends Entity {
     if (Gdx.input.isKeyPressed(right))   vector2.x += 1
   }
 
+  override def free(): Unit = {}
 }
 
 object Player {

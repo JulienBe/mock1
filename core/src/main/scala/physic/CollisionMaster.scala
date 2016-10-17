@@ -14,7 +14,6 @@ class CollisionMaster extends ContactListener {
   override def endContact(contact: Contact): Unit = {}
 
   override def beginContact(c: Contact): Unit = {
-    println(c.getFixtureA.getUserData + " : " + c.getFixtureB.getUserData)
     if (c.getFixtureA.getUserData.isInstanceOf[Entity] && c.getFixtureB.getUserData.isInstanceOf[Entity])
       EventSystem.event(new Collision(c.getFixtureA.getUserData.asInstanceOf[Entity], c.getFixtureB.getUserData.asInstanceOf[Entity]))
 
@@ -22,13 +21,13 @@ class CollisionMaster extends ContactListener {
     if (c.getFixtureB.getUserData.isInstanceOf[WallTag]) {
       c.getFixtureA.getUserData match {
         case pb:PlayerBullet => pb.hitWall()
-        case _ => println("ikz not matching " + c.getFixtureA.getUserData)
+        case _ =>
       }
     }
     if (c.getFixtureA.getUserData.isInstanceOf[WallTag]) {
       c.getFixtureB.getUserData match {
         case pb:PlayerBullet => pb.hitWall()
-        case _ => println("ayc not matching " + c.getFixtureB.getUserData)
+        case _ =>
       }
     }
 //      EventSystem.event(new WallCollision(c.getFixtureA.getUserData.asInstanceOf[Entity]))
