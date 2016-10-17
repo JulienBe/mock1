@@ -14,6 +14,7 @@ object EventSystem {
     EventTypes.createBullet -> new mutable.MutableList[Listener],
     EventTypes.createEnemy -> new mutable.MutableList[Listener],
     EventTypes.collision -> new mutable.MutableList[Listener],
+    EventTypes.wallCollision -> new mutable.MutableList[Listener],
     EventTypes.removeEnemy -> new mutable.MutableList[Listener]
   )
 
@@ -39,6 +40,7 @@ object EventSystem {
     case CreateBullet(pos, dir) => listeners(EventTypes.createBullet).foreach(_.receive(event.asInstanceOf[CreateBullet]))
     case CreateEnemy(clazz, pos) => listeners(EventTypes.createEnemy).foreach(_.receive(event.asInstanceOf[CreateEnemy], pos))
     case Collision(entityA, entityB) => listeners(EventTypes.collision).foreach(_.receive(entityA, entityB))
+    case WallCollision(entity) => listeners(EventTypes.wallCollision).foreach(_.receive(entity))
     case _ => println("??? " + event)
   }
 

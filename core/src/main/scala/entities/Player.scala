@@ -3,10 +3,9 @@ package entities
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import event.{CreateBullet, EventSystem}
-import lights.ConeLight
+import lights.{ConeLight, PointLight}
 import physic.Physic
 import world.MyWorld
 
@@ -19,6 +18,8 @@ class Player extends Entity {
   var nextShot = 0f
 
   val coneLight = new ConeLight(Physic.rayHandler, Player.rays, Color.CYAN, Player.distance, 2, 2, 32, Player.coneAngle)
+  coneLight.setSoftnessLength(0.4f)
+  val pointLigh = new PointLight(Physic.rayHandler, 10, Color.CYAN, 1, 0, 0)
 
   override def mask(): Short = Physic.playerMask
   override def category(): Short = Physic.playerCategory
@@ -46,10 +47,8 @@ class Player extends Entity {
     mapVectorToDir(Keys.Z, Keys.S, Keys.Q, Keys.D, dir)
     body.setLinearVelocity(dir.scl(speed() * delta))
     coneLight.setPosition(body.getPosition)
+    pointLigh.setPosition(body.getPosition)
     Player.position.set(body.getPosition)
-  }
-
-  def draw(shapeRender: ShapeRenderer): Unit = {
   }
 
   def mapVectorToDir(up: Int, down: Int, left: Int, right: Int, vector2: Vector2) = {

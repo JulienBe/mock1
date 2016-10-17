@@ -1,8 +1,8 @@
 package be.julien.squarehole
 
 import assets.{AssetMan, MapMan}
+import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.{GL20, OrthographicCamera}
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.{Game, Gdx}
@@ -19,7 +19,6 @@ class Squarehole extends Game {
 
   var cameraman: Cameraman = null
   var debugRenderer: Box2DDebugRenderer = null
-  var physic: Physic = null
   var world: MyWorld = null
   var assetMan: AssetMan = null
   var mapMan: MapMan = null
@@ -28,7 +27,6 @@ class Squarehole extends Game {
   override def create() = {
     cameraman = new Cameraman(MyWorld.width, MyWorld.height)
     debugRenderer = new Box2DDebugRenderer()
-    physic = new Physic()
     world = new MyWorld()
     Entity.init(this)
     new Creator().init()
@@ -46,13 +44,13 @@ class Squarehole extends Game {
     cameraman.update(world.player.body.getPosition, delta)
     spriteBatch.setProjectionMatrix(cameraman.cam.combined)
 
-    physic.doPhysicsStep(delta)
+    Physic.doPhysicsStep(delta)
     EventSystem.act()
     world.act(delta)
     spriteBatch.begin()
     mapMan.render(cameraman.cam, spriteBatch, delta)
     spriteBatch.end()
-    physic.render(delta, cameraman.cam)
+    Physic.render(delta, cameraman.cam)
 //    debugRenderer.render(Physic.world, cameraman.cam.combined)
 
     if (Physic.world.getBodyCount < 8)

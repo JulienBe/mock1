@@ -1,13 +1,18 @@
 package entities
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
+import lights.PointLight
 import physic.Physic
 
 /**
   * Created by julien on 21/09/16.
   */
 class PlayerBullet extends Entity {
+
+  var bounceLeft = 2
+
+  val pointLight = new PointLight(Physic.rayHandler, PlayerBullet.rays, PlayerBullet.color, PlayerBullet.lightLength, 0, 0)
 
   override def damping(): Float = 0
   override def width(): Float = PlayerBullet.width
@@ -21,16 +26,28 @@ class PlayerBullet extends Entity {
   def init(position: Vector2, bulletDirection: Vector2) = {
     body.setTransform(position.x - PlayerBullet.halfWidth, position.y - PlayerBullet.halfWidth, body.getAngle)
     body.setLinearVelocity(bulletDirection.scl(speed()))
+    pointLight.attachToBody(body)
     this
   }
 
-  def draw(shapeRender: ShapeRenderer) = {
+  def hitWall() = {
+    bounceLeft = bounceLeft - 1
+    println("bounce : " + bounceLeft)
+    if (bounceLeft <= 0)
+      destroy()
+  }
+
+  override def destroy() = {
+    pointLight.setActive(false)
+    super.destroy()
   }
 }
 
-case class BulletCreation(pos: Vector2, dir: Vector2)
-
 object PlayerBullet {
+  val rays = 6
+  val color = new Color(.0f, .5f, 1, 1)
+  val lightLength = .5f
+
   val speed = 24f
   val density = 0f
   val friction = 0f

@@ -15,5 +15,6 @@ trait Listener {
   def receive(createEnemy: CreateEnemy, pos: Vector2) = {}
   def receive(removeEnemy: RemoveEnemy) = {}
   def receive(entityA: Entity, entityB: Entity) = {}
+  def receive(entity: Entity) = {}
 
 }

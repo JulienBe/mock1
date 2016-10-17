@@ -1,5 +1,6 @@
 package physic
 
+import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.{Rectangle, Vector2}
 import com.badlogic.gdx.physics.box2d._
@@ -8,9 +9,21 @@ import lights.RayHandler
 /**
   * Created by julien on 08/10/16.
   */
-class Physic() {
+object Physic {
 
-  Physic.world.setContactListener(new CollisionMaster)
+  val playerCategory: Short = 0x0001
+  val otherCategory: Short = 0x0002
+  val playerMask: Short = otherCategory
+  val otherMask: Short = (otherCategory | playerCategory).toShort
+  val bodiesToClean = new Array[Body]()
+
+  val world = new World(Vector2.Zero, true)
+  world.setContactListener(new CollisionMaster)
+  val rayHandler = new RayHandler(world)
+
+  val timestep = 1/60f
+  val velocityIteration = 6
+  val positionIteration = 2
 
   var accumulator = 0f
 
@@ -19,34 +32,25 @@ class Physic() {
     Physic.rayHandler.updateAndRender()
   }
 
+  def cleanBodies() = {
+    for (i <- 0 until bodiesToClean.size)
+      world.destroyBody(bodiesToClean.get(i))
+    bodiesToClean.clear()
+  }
+
   def doPhysicsStep(deltaTime: Float) {
+    cleanBodies()
     // fixed time step
     // max frame time to avoid spiral of death (on slow devices)
     val frameTime = Math.min(deltaTime, 0.25f)
     accumulator += frameTime
-    while (accumulator >= Physic.timestep) {
-      Physic.world.step(Physic.timestep, Physic.velocityIteration, Physic.positionIteration)
-      accumulator -= Physic.timestep
+    while (accumulator >= timestep) {
+      world.step(timestep, velocityIteration, positionIteration)
+      accumulator -= timestep
     }
   }
 
-}
-
-object Physic {
-  val playerCategory: Short = 0x0001
-  val otherCategory: Short = 0x0002
-  val playerMask: Short = otherCategory
-  val otherMask: Short = (otherCategory | playerCategory).toShort
-
-  val world = new World(Vector2.Zero, true)
-  val rayHandler = {
-    val r = new RayHandler(Physic.world)
-    r.setAmbientLight(1f, 1f, 1f, 0.05f)
-    r
-  }
-  val timestep = 1/60f
-  val velocityIteration = 6
-  val positionIteration = 2
+  def bodyToClean(body: Body) = bodiesToClean.add(body)
 
   def getRectangle(rectangle: Rectangle, ppt: Float): Shape = {
     val polygon = new PolygonShape()

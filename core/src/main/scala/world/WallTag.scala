@@ -1,7 +1,7 @@
 package world
 
 /**
-  * Created by julien on 15/10/16.
+  * Created by julein on 16/10/16.
   */
 class WallTag {
 

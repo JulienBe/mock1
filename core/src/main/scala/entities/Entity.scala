@@ -13,7 +13,7 @@ import physic.Physic
   */
 abstract class Entity() {
 
-  val body: Body = createBody()
+  val body = createBody()
   var dir = new Vector2
 
   def mask(): Short = Physic.otherMask
@@ -25,7 +25,7 @@ abstract class Entity() {
   def friction(): Float
   def restitution(): Float
   def bodyType(): BodyType = BodyType.DynamicBody
-  def draw(shapeRenderer: ShapeRenderer)
+  def draw(shapeRenderer: ShapeRenderer) = {}
   def touchedBy(entityA: Entity) = {}
 
   def init(pos: Vector2) = {
@@ -34,7 +34,7 @@ abstract class Entity() {
   }
 
   def destroy() = {
-    Physic.world.destroyBody(body)
+    Physic.bodyToClean(body)
   }
 
   def createBody(): Body = {
@@ -51,7 +51,7 @@ abstract class Entity() {
     bodyDef.linearDamping = damping()
     bodyDef
   }
-  def createFixture(b: Body, shape: Shape): Unit = {
+  def createFixture(b: Body, shape: Shape) = {
     val fixtureDef = new FixtureDef()
     fixtureDef.shape = shape
     fixtureDef.density = density()
