@@ -51,7 +51,7 @@ class Squarehole extends Game {
     mapMan.render(cameraman.cam, spriteBatch, delta)
     spriteBatch.end()
     Physic.render(delta, cameraman.cam)
-//    debugRenderer.render(Physic.world, cameraman.cam.combined)
+    debugRenderer.render(Physic.world, cameraman.cam.combined)
 
     if (Physic.world.getBodyCount < 8)
       EventSystem.event(

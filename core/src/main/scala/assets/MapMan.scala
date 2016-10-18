@@ -6,7 +6,7 @@ import com.badlogic.gdx.maps.objects.{CircleMapObject, EllipseMapObject, Polygon
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
-import com.badlogic.gdx.physics.box2d.{BodyDef, Filter, PolygonShape, Shape}
+import com.badlogic.gdx.physics.box2d._
 import com.badlogic.gdx.utils.Array
 import physic.Physic
 import world.{Wall, WallTag}
@@ -24,12 +24,11 @@ class MapMan(assetMan: AssetMan) {
     val obstacles = tiledMap.getLayers.get("Obstacles").getObjects.iterator()
     while (obstacles.hasNext) {
       val obstacle = obstacles.next()
-      var shape: Shape = null
+      var shapes = new Array[Shape]()
       obstacle match {
-        case rect:RectangleMapObject => shape = Physic.getRectangle(rect.getRectangle, pixelPerTile)
-        case c:CircleMapObject => shape = Physic.getCircle(c.getCircle.radius, c.getCircle.x, c.getCircle.y, pixelPerTile)
-        case poly:PolygonMapObject => shape = Physic.getPolygon(poly.getPolygon.getVertices)
-        case c:EllipseMapObject => shape = Physic.getCircle(c.getEllipse.width / 2, c.getEllipse.x, c.getEllipse.y, pixelPerTile)
+        case rect:RectangleMapObject => shapes = Physic.getPolygons(rect.getRectangle(), pixelPerTile, 0.3f)
+        case poly:PolygonMapObject => shapes = Physic.getPolygons(poly.getPolygon.getVertices, pixelPerTile)//Physic.getPolygon(poly.getPolygon.getVertices)
+        case c:EllipseMapObject => shapes = Physic.getCircle(c.getEllipse.width / 2, c.getEllipse.x, c.getEllipse.y, pixelPerTile)
         case _ => {
           println("couldn't match obstacles : " + obstacle)
         }
@@ -37,18 +36,24 @@ class MapMan(assetMan: AssetMan) {
       val bd = new BodyDef()
       bd.`type` = BodyType.StaticBody
       val body = Physic.world.createBody(bd)
-      val fixture = body.createFixture(shape, 1)
-      fixture.setUserData(new WallTag)
-      val filter = new Filter
-      filter.categoryBits = Physic.otherCategory
-      filter.maskBits = Physic.otherMask
-      fixture.setFilterData(filter)
 
-      if (shape.isInstanceOf[PolygonShape])
-        walls.addAll(Wall.fromBox(shape.asInstanceOf[PolygonShape], assetMan.square))
-
-      shape.dispose()
+      for (i <- 0 until shapes.size) {
+        handleWallShape(shapes.get(i), body)
+      }
     }
+  }
+  def handleWallShape(shape: Shape, body: Body) = {
+    val fixture = body.createFixture(shape, 1)
+    fixture.setUserData(new WallTag)
+    val filter = new Filter
+    filter.categoryBits = Physic.otherCategory
+    filter.maskBits = Physic.otherMask
+    fixture.setFilterData(filter)
+
+    if (shape.isInstanceOf[PolygonShape])
+      walls.addAll(Wall.fromBox(shape.asInstanceOf[PolygonShape], assetMan.square))
+
+    shape.dispose()
   }
 
   def render(camera: OrthographicCamera, spriteBatch: SpriteBatch, delta: Float): Unit = {

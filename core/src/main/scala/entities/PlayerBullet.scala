@@ -12,7 +12,7 @@ import physic.Physic
   */
 class PlayerBullet extends Entity with Poolable {
 
-  var bounceLeft = 2
+  var bounceLeft = 0
   val pointLight = new PointLight(Physic.rayHandler, PlayerBullet.rays, PlayerBullet.color, PlayerBullet.lightLength, 0, 0)
 
   override def damping(): Float = 0
@@ -25,10 +25,12 @@ class PlayerBullet extends Entity with Poolable {
   override def category(): Short = Physic.playerCategory
 
   def init(position: Vector2, bulletDirection: Vector2) = {
+    println(this + " init")
     body.setTransform(position.x - PlayerBullet.halfWidth, position.y - PlayerBullet.halfWidth, body.getAngle)
-     body.setLinearVelocity(bulletDirection.scl(speed()))
+    body.setLinearVelocity(bulletDirection.scl(speed()))
     body.setActive(true)
     pointLight.attachToBody(body)
+    bounceLeft = 2
     pointLight.setActive(true)
     this
   }
@@ -47,7 +49,13 @@ class PlayerBullet extends Entity with Poolable {
   override def reset(): Unit = {
   }
 
-  override def free() = PlayerBullet.pool.free(this)
+  override def free() = {
+    println(this + " free")
+    PlayerBullet.pool.free(this)
+  }
+
+
+  override def toString = s"PlayerBullet($bounceLeft, $pointLight, ${body.isActive})"
 }
 
 object PlayerBullet {
@@ -63,10 +71,12 @@ object PlayerBullet {
   val halfWidth = width / 2
   val pool = new Pool[PlayerBullet]() {
     override def newObject() = {
-      println("new bullet")
       new PlayerBullet
     }
   }
 
-  def add(position: Vector2, bulletDirection: Vector2) = Entity.add(pool.obtain().init(position, bulletDirection))
+  def add(position: Vector2, bulletDirection: Vector2) = {
+    println("want a new one")
+    Entity.add(pool.obtain().init(position, bulletDirection))
+  }
 }
