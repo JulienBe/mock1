@@ -71,13 +71,11 @@ object Physic {
     polygon
   }
 
-  def getCircle(radius: Float, x: Float, y: Float, ppt: Float): Array[Shape] = {
+  def getCircle(radius: Float, x: Float, y: Float, ppt: Float): Shape = {
     val circleShape = new CircleShape()
     circleShape.setRadius(radius / ppt)
     circleShape.setPosition(new Vector2((x + radius) / ppt, (y + radius) / ppt))
-    val array = new Array[Shape]()
-    array.add(circleShape)
-    array
+    circleShape
   }
 
   def getPolygon(vertices: scala.Array[Float]): Shape = {
@@ -95,6 +93,7 @@ object Physic {
   // | |              | |
   // | 4______________3 |
   // 1/________________\2
+  // and it ends up being useless. But I like it :( Don't code when you're tired (which is exactly what I'm currently doing)
   def getPolygons(r: Rectangle, ppt: Float, offset: Float): Array[Shape] = {
     val x = r.x / ppt
     val y = r.y / ppt
@@ -121,7 +120,6 @@ object Physic {
 
   def getPolygons(vertices: scala.Array[Float], ppt: Float): Array[Shape] = {
     val shapes = new Array[Shape]()
-//    vertices.foreach(_ * ppt)
     for (i <- 0 until vertices.length by 8) {
       val polygon = new PolygonShape()
       polygon.set(scala.Array(

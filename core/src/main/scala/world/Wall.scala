@@ -1,5 +1,6 @@
 package world
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion
 import com.badlogic.gdx.graphics.g2d.{SpriteBatch, TextureRegion}
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.PolygonShape
@@ -28,7 +29,7 @@ class Wall(val origin: Vector2, val end: Vector2, val textureRegion: TextureRegi
 
 object Wall {
 
-  val height = .1f
+  val height = .5f
 
   def fromBox(polygon: PolygonShape, textureRegion: TextureRegion) = {
     val walls = new Array[Wall]()
@@ -44,6 +45,14 @@ object Wall {
       walls.add(new Wall(origin, end, textureRegion))
     }
     walls
+  }
+
+  def instantiate(shape: PolygonShape, square: AtlasRegion): Wall = {
+    val origin = new Vector2()
+    val end = new Vector2()
+    shape.getVertex(0, origin)
+    shape.getVertex(1, end)
+    new Wall(origin, end, square)
   }
 
 }
