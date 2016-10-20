@@ -29,7 +29,7 @@ class Wall(val origin: Vector2, val end: Vector2, val textureRegion: TextureRegi
 
 object Wall {
 
-  val height = .5f
+  val height = .25f
 
   def fromBox(polygon: PolygonShape, textureRegion: TextureRegion) = {
     val walls = new Array[Wall]()
@@ -47,12 +47,36 @@ object Wall {
     walls
   }
 
+  //4--7--3
+  //|     |
+  //5     6
+  //|     |
+  //1--8--2
   def instantiate(shape: PolygonShape, square: AtlasRegion): Wall = {
-    val origin = new Vector2()
-    val end = new Vector2()
-    shape.getVertex(0, origin)
-    shape.getVertex(1, end)
-    new Wall(origin, end, square)
+    val v1 = new Vector2()
+    val v2 = new Vector2()
+    val v3 = new Vector2()
+    val v4 = new Vector2()
+    shape.getVertex(0, v1)
+    shape.getVertex(1, v2)
+    shape.getVertex(2, v3)
+    shape.getVertex(3, v4)
+    val v5 = new Vector2((v1.x + v4.x) / 2, (v1.y + v4.y) / 2)
+    val v6 = new Vector2((v2.x + v3.x) / 2, (v1.y + v3.y) / 2)
+    val horizontal = new Vector2(v6).sub(v5)
+    val v7 = new Vector2((v4.x + v3.x) / 2, (v4.y + v3.y) / 2)
+    val v8 = new Vector2((v1.x + v2.x) / 2, (v1.y + v2.y) / 2)
+    val vertical = new Vector2(v7).sub(v8)
+
+    if (vertical.len2() > horizontal.len2()) {
+      v8.x += height / 2
+      v7.x += height / 2
+      new Wall(v8, v7, square)
+    } else {
+      v5.y -= height / 2
+      v6.y -= height / 2
+      new Wall(v5, v6, square)
+    }
   }
 
 }

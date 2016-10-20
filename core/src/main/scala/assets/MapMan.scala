@@ -26,9 +26,9 @@ class MapMan(assetMan: AssetMan) {
   }
 
   def processLayer(tiledMap: TiledMap, pixelPerTile: Float, name: String, tag: (Fixture, Shape) => Unit) = {
-    val obstacles = tiledMap.getLayers.get(name).getObjects.iterator()
-    while (obstacles.hasNext) {
-      val obstacle = obstacles.next()
+    val objects = tiledMap.getLayers.get(name).getObjects.iterator()
+    while (objects.hasNext) {
+      val obstacle = objects.next()
       var shape: Shape = null
       obstacle match {
         case rect: RectangleMapObject => shape = Physic.getRectangle(rect.getRectangle, pixelPerTile)
@@ -55,12 +55,12 @@ class MapMan(assetMan: AssetMan) {
   }
 
   def handleShape(shape: Shape, body: Body, tag: (Fixture, Shape) => Unit) = {
-    println("body : " + body + " shape : " + shape)
     val fixture = body.createFixture(shape, 1)
     val filter = new Filter
     filter.categoryBits = Physic.otherCategory
     filter.maskBits = Physic.otherMask
     fixture.setFilterData(filter)
+    tag(fixture, shape)
     shape.dispose()
   }
 

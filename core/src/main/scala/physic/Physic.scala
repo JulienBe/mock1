@@ -1,7 +1,6 @@
 package physic
 
-import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.maps.objects.RectangleMapObject
+import com.badlogic.gdx.graphics.{Color, OrthographicCamera}
 import com.badlogic.gdx.math.{Rectangle, Vector2}
 import com.badlogic.gdx.physics.box2d._
 import com.badlogic.gdx.utils.Array
@@ -22,6 +21,7 @@ object Physic {
   val world = new World(Vector2.Zero, true)
   world.setContactListener(new CollisionMaster)
   val rayHandler = new RayHandler(world)
+  rayHandler.setAmbientLight(Color.DARK_GRAY)
 
   val timestep = 1/60f
   val velocityIteration = 6

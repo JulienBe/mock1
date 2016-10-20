@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="14" height="13" tilewidth="16" tileheight="16" nextobjectid="87">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="14" height="13" tilewidth="16" tileheight="16" nextobjectid="154">
  <tileset firstgid="1" name="Game Boy GBC - The Legend of Zelda Links Awakening DX - House Tileset" tilewidth="16" tileheight="16" spacing="1" tilecount="49" columns="7">
   <image source="../Game Boy GBC - The Legend of Zelda Links Awakening DX - House Tileset.png" width="119" height="118"/>
  </tileset>
@@ -75,9 +75,51 @@
   </object>
  </objectgroup>
  <objectgroup name="Wall">
-  <object id="83" x="212" y="52" width="4" height="176"/>
-  <object id="84" x="16" y="52" width="4" height="176"/>
-  <object id="85" x="4" y="228" width="224" height="4"/>
-  <object id="86" x="4" y="48" width="224" height="4"/>
+  <object id="84" x="16" y="52" width="4" height="16"/>
+  <object id="86" x="16" y="48" width="16" height="4"/>
+  <object id="103" x="208" y="116" width="4" height="16"/>
+  <object id="147" x="192" y="228" width="16" height="4"/>
+  <object id="140" x="144" y="48" width="16" height="4"/>
+  <object id="104" x="208" y="164" width="4" height="16"/>
+  <object id="141" x="192" y="48" width="16" height="4"/>
+  <object id="102" x="208" y="148" width="4" height="16"/>
+  <object id="100" x="208" y="100" width="4" height="16"/>
+  <object id="101" x="208" y="132" width="4" height="16"/>
+  <object id="105" x="208" y="196" width="4" height="16"/>
+  <object id="138" x="160" y="48" width="16" height="4"/>
+  <object id="98" x="208" y="68" width="4" height="16"/>
+  <object id="151" x="128" y="228" width="16" height="4"/>
+  <object id="139" x="176" y="48" width="16" height="4"/>
+  <object id="99" x="208" y="84" width="4" height="16"/>
+  <object id="142" x="160" y="228" width="16" height="4"/>
+  <object id="97" x="208" y="52" width="4" height="16"/>
+  <object id="150" x="144" y="228" width="16" height="4"/>
+  <object id="106" x="208" y="212" width="4" height="16"/>
+  <object id="107" x="208" y="180" width="4" height="16"/>
+  <object id="148" x="176" y="228" width="16" height="4"/>
+  <object id="137" x="128" y="48" width="16" height="4"/>
+  <object id="136" x="80" y="48" width="16" height="4"/>
+  <object id="131" x="32" y="48" width="16" height="4"/>
+  <object id="133" x="48" y="48" width="16" height="4"/>
+  <object id="132" x="64" y="48" width="16" height="4"/>
+  <object id="88" x="16" y="84" width="4" height="16"/>
+  <object id="134" x="96" y="48" width="16" height="4"/>
+  <object id="87" x="16" y="68" width="4" height="16"/>
+  <object id="135" x="112" y="48" width="16" height="4"/>
+  <object id="96" x="16" y="212" width="4" height="16"/>
+  <object id="95" x="16" y="196" width="4" height="16"/>
+  <object id="90" x="16" y="116" width="4" height="16"/>
+  <object id="93" x="16" y="164" width="4" height="16"/>
+  <object id="94" x="16" y="180" width="4" height="16"/>
+  <object id="89" x="16" y="100" width="4" height="16"/>
+  <object id="146" x="16" y="228" width="16" height="4"/>
+  <object id="91" x="16" y="132" width="4" height="16"/>
+  <object id="92" x="16" y="148" width="4" height="16"/>
+  <object id="145" x="48" y="228" width="16" height="4"/>
+  <object id="149" x="64" y="228" width="16" height="4"/>
+  <object id="152" x="96" y="228" width="16" height="4"/>
+  <object id="144" x="32" y="228" width="16" height="4"/>
+  <object id="143" x="80" y="228" width="16" height="4"/>
+  <object id="153" x="112" y="228" width="16" height="4"/>
  </objectgroup>
 </map>
